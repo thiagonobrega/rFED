@@ -1,0 +1,14 @@
+key,value
+URL_AUTHENTICATE,https://api.mobile.endomondo.com/mobile/auth
+URL_WORKOUTS,https://api.mobile.endomondo.com/mobile/api/workouts
+URL_WORKOUT_GET ,https://api.mobile.endomondo.com/mobile/api/workout/get
+URL_WORKOUT_POST,https://api.mobile.endomondo.com/mobile/api/workout/post
+URL_TRACK,https://api.mobile.endomondo.com/mobile/track
+URL_PLAYLIST,https://api.mobile.endomondo.com/mobile/playlist
+URL_ACCOUNT_GET,https://api.mobile.endomondo.com/mobile/api/profile/account/get
+URL_ACCOUNT_POST,https://api.mobile.endomondo.com/mobile/api/profile/account/post
+UNITS_METRIC,METRIC
+UNITS_IMPERIAL,IMPERIAL
+GENDER_MALE,MALE
+GENDER_FEMALE,FEMALE
+authToken,0
