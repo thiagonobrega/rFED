@@ -21,6 +21,7 @@ $RECYCLE.BIN/
 # Rstudio
 .Rproj.user/
 .Rhistory
+.RData
 
 # =========================
 # Operating System Files
