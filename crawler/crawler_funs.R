@@ -2,6 +2,8 @@ library(uuid)
 library(httr)
 library(base)
 
+source('crawler/util.R')
+
 ###
 ### Auth in endmondo
 ###
@@ -146,3 +148,60 @@ list_workouts_by_year <- function(confs,start,end){
     
   ws[!duplicated(ws),]
 }
+
+
+
+###
+### Get workout 
+###
+
+get_workout_data <- function(confs,id){
+  #id = 861392806
+  
+  
+  query_workout <- function(workout_id){
+    #f = "device,simple,basic,motivation,interval,hr_zones,weather,polyline_encoded_small,points,lcp_count,tagged_users,pictures,feed"
+    f = "weather,polyline_encoded_small,points"
+    list(authToken = authToken,language='en', fields=f , workoutId=workout_id)
+  }
+  
+  URL_WORKOUT_GET = confs[confs$key == "URL_WORKOUT_GET", ]$value
+  workout_data <- content(GET(URL_WORKOUT_GET,query=query_workout(id)))
+  
+  #consultar a API code 3 accuwather
+  #workout_data['weather']
+
+  points = workout_data['points'][[1]]
+  #date <- get_data(points[[1]],"time")
+  #time <- get_data(points[[1]],"inst")
+  #lat <- get_data(points[[1]],"lat")
+  #long <- get_data(points[[1]],"lng")
+  #hr <- get_data(points[[1]],"hr")
+  #dist <- get_data(points[[1]],"dist")
+  #points <- points[-1]
+  
+  #df <- data.frame(date,time,lat,long,dist,hr)
+  
+  df <- data.frame(matrix(ncol = 5, nrow = 0))
+  colnames(df) <- c("date","lat","long","distance","hr")
+  
+  
+  #for (point in workout_data['points'][[1]] ){
+  for (point in points ){
+    date <- get_data(point,"time")
+    #time <- get_data(point,"inst")
+    lat <- get_data(point,"lat")
+    long <- get_data(point,"lng")
+    hr <- get_data(point,"hr")
+    dist <- get_data(point,"dist")
+    
+    p <-  data.frame(date,lat,long,dist,hr)
+    colnames(p) <- c("date","lat","long","distance","hr")
+    df <- rbind(p, df)
+  }
+  
+  df
+  
+}
+
+
