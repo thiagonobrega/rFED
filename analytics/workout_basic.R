@@ -38,9 +38,8 @@ plot_hr_in_workout<-function(rest_hr,max_hr,workout_data){
 ###
 #TODO: INVERTED X AXIS?
 plot_hr_zones_in_workout<-function(rest_hr,max_hr,workout_info,workout_data){
-  start = workout_data[,1][1]
-  end = workout_data[,1][nrow(workout_data)]
-  delta = as.integer(start - end)+5
+  start = workout_info$start_time
+  delta = as.integer(workout_data[,1][1] - workout_data[,1][nrow(workout_data)])+5
   ye = max(workout_data$hr)+10
   zones = get_hr_zones(rest_hr,max_hr)
   
@@ -50,7 +49,7 @@ plot_hr_zones_in_workout<-function(rest_hr,max_hr,workout_info,workout_data){
                 workout_info$start_time,sep = "\n")
                 
   ggplot() + 
-    geom_line(data=workout_data,aes(x=( (start - date)/60 ), y=hr),size=1) +
+    geom_line(data=workout_data,aes(x=( (date-start)/60 ), y=hr),size=1) +
     geom_rect(data=zones, aes(xmin=0,xmax=delta,ymin=hrl,ymax=hrh,fill=name), alpha=0.35) +
     scale_color_manual(values=colors,name= "Heart Zone", guide = guide_legend(reverse = TRUE) ) +
     labs(x="Time (minutes)") + labs(y="heart rate (bpm)") +
