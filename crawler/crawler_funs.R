@@ -3,6 +3,7 @@ library(httr)
 library(base)
 
 source('crawler/util.R')
+source('analytics/util.R')
 
 ###
 ### Auth in endmondo
@@ -155,9 +156,7 @@ list_workouts_by_year <- function(confs,start,end){
 ### Get workout 
 ###
 
-get_workout_data <- function(confs,id){
-  #id = 861392806
-  
+get_workout_data <- function(confs,zones,id){
   
   query_workout <- function(workout_id){
     #f = "device,simple,basic,motivation,interval,hr_zones,weather,polyline_encoded_small,points,lcp_count,tagged_users,pictures,feed"
@@ -172,16 +171,6 @@ get_workout_data <- function(confs,id){
   #workout_data['weather']
 
   points = workout_data['points'][[1]]
-  #date <- get_data(points[[1]],"time")
-  #time <- get_data(points[[1]],"inst")
-  #lat <- get_data(points[[1]],"lat")
-  #long <- get_data(points[[1]],"lng")
-  #hr <- get_data(points[[1]],"hr")
-  #dist <- get_data(points[[1]],"dist")
-  #points <- points[-1]
-  
-  #df <- data.frame(date,time,lat,long,dist,hr)
-  
   df <- data.frame(matrix(ncol = 5, nrow = 0))
   colnames(df) <- c("date","lat","long","distance","hr")
   
@@ -199,6 +188,14 @@ get_workout_data <- function(confs,id){
     colnames(p) <- c("date","lat","long","distance","hr")
     df <- rbind(p, df)
   }
+  
+  df$date = as.POSIXct(as.character(df$date),format = '%Y-%m-%d %H:%M:%S UTC' )
+  
+  gZone <- function(ihr){
+    get_zone(zones,ihr)
+  }
+  
+  df$hrb <- mapply(gZone,df$hr)
   
   df
   
