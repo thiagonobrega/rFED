@@ -68,8 +68,11 @@ plot_histogram_workout_zones<-function(rest_hr,max_hr,workout_info,workout_data)
   tit <- paste( paste("Sport: ", get_sport_name(workout_info$sport),sep = ""),
                 workout_info$start_time,sep = "\n")
     
-  ggplot(workout_data, aes(hrb,fill=hrb)) + 
-    geom_bar(aes(y = (..count..)/sum(..count..)) )+
+  ggplot(workout_data, aes(as.factor(hrb),fill=hrb)) + 
+    geom_bar(aes(y = (..count..)/sum(..count..))) +
+    geom_text(aes(y = ((..count..)/sum(..count..)), 
+                  label = scales::percent((..count..)/sum(..count..))), stat = "count", 
+                  vjust = -0.25) +
     scale_y_continuous(labels=percent_format()) +
     scale_fill_manual(values=colors,name= "Heart Zone", guide = guide_legend(reverse = TRUE) ) +
     labs(x="") + labs(y="percentage") + 
