@@ -125,6 +125,8 @@ list_workouts <- function(confs,results=40,before=0){
     i=1+i
   }
   
+  df$start_time <- as.POSIXct(as.character(df$start_time),format = '%Y-%m-%d %H:%M:%S UTC' )
+  
   df
 }
 
